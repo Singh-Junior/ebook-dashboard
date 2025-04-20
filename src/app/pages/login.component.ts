@@ -34,16 +34,16 @@ export class LoginComponent {
     this.authService.login(email, password).subscribe(
       (success) => {
         if (success) {
-          // Navigate to dashboard after successful login
+          this.alertService.show('success', 'Login successful!'); // Show success alert
           // this.router.navigate(['/dashboard']);
         } else {
           this.errorMessage = 'Invalid email or password';
-          this.alertService.show('error', this.errorMessage); // Show error alert
+          this.alertService.show('error', this.errorMessage);
         }
       },
       (error) => {
         this.errorMessage = 'Something went wrong!';
-        this.alertService.show('error', this.errorMessage); // Show error alert
+        this.alertService.show('error', this.errorMessage);
       }
     );
   }
