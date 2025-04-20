@@ -1,1 +1,60 @@
-<h1 class="text-2xl font-bold">Library Overview</h1>
+<div class="pdf-viewer-container" #pdfContainer>
+  <pdf-viewer
+    #pdfViewer
+    [src]="pdfSrc"
+    [page]="currentPage"
+    [show-all]="false"
+    [render-text]="true"
+    [rotation]="0"
+    [zoom]="1.22"
+    (after-load-complete)="afterLoadComplete($event)"
+    style="width: 35%; height: 100%; float: left"
+  >
+  </pdf-viewer>
+
+  <!-- Render page 2 -->
+  <pdf-viewer
+    #pdfViewer
+    *ngIf="currentPage + 1 <= totalPages"
+    [src]="pdfSrc"
+    [page]="currentPage + 1"
+    [show-all]="false"
+    [render-text]="true"
+    [rotation]="0"
+    [zoom]="1.22"
+    (after-load-complete)="afterLoadComplete($event)"
+    style="width: 35%; height: 100%; float: left"
+  >
+  </pdf-viewer>
+</div>
+
+<div class="controls">
+  <button
+    (click)="prevPage()"
+    class="px-3 py-1 bg-indigo-200 rounded hover:bg-indigo-300 disabled:opacity-50"
+    [disabled]="currentPage <= 1"
+  >
+    Previous
+  </button>
+  <button
+    *ngIf="!isInReadingMode"
+    class="px-3 py-1 bg-indigo-200 rounded hover:bg-indigo-300"
+    (click)="enterReadingMode()"
+  >
+    Enter Reading Mode
+  </button>
+  <button
+    *ngIf="isInReadingMode"
+    class="px-3 py-1 bg-indigo-200 rounded hover:bg-indigo-300"
+    (click)="exitReadingMode()"
+  >
+    Exit Reading Mode
+  </button>
+  <button
+    (click)="nextPage()"
+    class="px-3 py-1 bg-indigo-200 rounded hover:bg-indigo-300 disabled:opacity-50"
+    [disabled]="currentPage >= totalPages"
+  >
+    Next
+  </button>
+</div>

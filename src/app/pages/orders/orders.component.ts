@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Book } from '../books.data';
-import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
 })
@@ -20,7 +20,7 @@ export class OrdersComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 20;
 
-  constructor(private authService: AuthService) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.loadOrders(); // Load orders when the component initializes
@@ -121,7 +121,7 @@ export class OrdersComponent implements OnInit {
   }
 
   viewBook(book: Book): void {
-    // Logic to view book details can be implemented here
+    this.router.navigate(['/dashboardpage/library']);
   }
 
   // Get the total number of pages
