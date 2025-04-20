@@ -13,6 +13,9 @@
     [ngClass]="{ '-translate-x-full': !isSidebarOpen }">
     <div class="p-4">
       <h1 class="text-xl font-bold text-indigo-600 mt-8 mb-6">eBook Dashboard</h1>
+      <div class="flex justify-center mb-4">
+        <img src="images/bookIcon.png" alt="App Icon" class="h-16 w-16" />
+      </div>
       <nav class="space-y-2">
         <a routerLink="/dashboardpage/dashboard" routerLinkActive="active" class="block px-4 py-2 rounded hover:bg-indigo-100">Dashboard</a>
         <a routerLink="/dashboardpage/orders" routerLinkActive="active" class="block px-4 py-2 rounded hover:bg-indigo-100">Orders</a>
@@ -31,7 +34,10 @@
                 d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
-      <h2 class="text-lg font-semibold">Welcome {{ firstName }}</h2>
+
+      <div class="text-lg font-semibold flex justify-center">
+        <img src="images/bookIcon.png" alt="App Icon" class="h-8 w-8 mr-4" />
+       <h2>Welcome {{ firstName }}</h2></div>
       <button class="text-red-600 hover:underline" (click)="logout()">Logout</button>
     </header>
 

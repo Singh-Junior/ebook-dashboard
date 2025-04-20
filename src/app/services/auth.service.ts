@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 // import * as jwt from 'jsonwebtoken';
 import {jwtDecode} from 'jwt-decode';
+import { Book } from '../pages/books.data'; // Adjust the import path as necessary
 
 @Injectable({
   providedIn: 'root',
@@ -59,7 +60,6 @@ export class AuthService {
     this.loggedIn.next(false);
   }
 
-
   private generateJWT(email: string): string {
     const payload = {
       email,
@@ -80,6 +80,17 @@ export class AuthService {
       return decoded;
     } catch (error) {
       throw new Error('Invalid token');
+    }
+  }
+
+  addToOrders(book: Book): void {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    if (currentUser && currentUser.email) {
+      const userOrders = JSON.parse(localStorage.getItem(`${currentUser.email}-orders`) || '[]');
+      userOrders.push(book);
+      localStorage.setItem(`${currentUser.email}-orders`, JSON.stringify(userOrders));
+    } else {
+      console.error('No user is logged in');
     }
   }
 

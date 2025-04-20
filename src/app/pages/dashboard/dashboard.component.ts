@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BOOKS, Book } from '../books.data';
 import { AlertService } from '../../services/alert.service';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +26,7 @@ export class DashboardComponent implements OnInit {
   booksPerPage: number = 20;
   totalPages: number = 1;
 
-  constructor(private alertS: AlertService) {}
+  constructor(private alertS: AlertService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.filteredBooks = [...this.books];
@@ -38,15 +39,17 @@ export class DashboardComponent implements OnInit {
     if (!term) {
       this.filteredBooks = [...this.books];
     } else {
-      this.filteredBooks = this.books.filter(book =>
-        book.title.toLowerCase().includes(term) ||
-        book.author.toLowerCase().includes(term)
+      this.filteredBooks = this.books.filter(
+        (book) =>
+          book.title.toLowerCase().includes(term) ||
+          book.author.toLowerCase().includes(term)
       );
     }
 
-    this.noBooksFoundMessage = this.filteredBooks.length === 0
-      ? 'Seems like there are no books matching your search...'
-      : '';
+    this.noBooksFoundMessage =
+      this.filteredBooks.length === 0
+        ? 'Seems like there are no books matching your search...'
+        : '';
 
     this.currentPage = 1;
     this.applySorting();
@@ -87,6 +90,23 @@ export class DashboardComponent implements OnInit {
   }
 
   buyBook(book: Book): void {
-    this.alertS.show('info', `You've chosen to buy: ${book.title}`);
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+    if (currentUser && currentUser.email) {
+      const ordersKey = `${currentUser.email}-orders`;
+      let currentOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+      const bookAlreadyInOrders = currentOrders.some(
+        (order: any) => order.id === book.id
+      );
+
+      if (bookAlreadyInOrders) {
+        this.alertS.show('info', `You already own "${book.title}".`);
+      } else {
+        this.authService.addToOrders(book);
+        this.alertS.show('success', `${book.title} : Order placed successfully!`);
+      }
+    } else {
+      this.alertS.show('error', 'Please login to place an order.');
+    }
   }
 }
