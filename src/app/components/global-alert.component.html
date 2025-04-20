@@ -1,0 +1,8 @@
+<div
+  *ngIf="alertService.alert()"
+  [ngClass]="[colorClass(), positionClass()]"
+  class="fixed px-4 py-2 rounded shadow z-50 transition-all duration-500"
+>
+  <span>{{ alertService.alert()?.message }}</span>
+  <button (click)="closeAlert()" class="ml-4 text-white font-bold">×</button>
+</div>

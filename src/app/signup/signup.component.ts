@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AlertService } from '../services/alert.service';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class SignupComponent {
   signupForm: FormGroup;
   passwordsMismatch = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,  private alertService: AlertService) {
     this.signupForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -36,8 +37,25 @@ export class SignupComponent {
 
   onSubmit() {
     if (this.signupForm.valid) {
-      // Handle signup logic (e.g., call an API to create the user)
+      this.signup();
       console.log(this.signupForm.value);
     }
+  }
+
+  signup() {
+    const formData = this.signupForm.value;
+    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+
+    // Check if user already exists
+    const existingUser = storedUsers.find((user: any) => user.email === formData.email);
+    if (existingUser) {
+      this.alertService.show('info','User already exists! Please login.');
+      return;
+    }
+
+    // Add new user and save
+    storedUsers.push(formData);
+    localStorage.setItem('users', JSON.stringify(storedUsers));
+    this.alertService.show('success','Signup successful! Please login.');
   }
 }
