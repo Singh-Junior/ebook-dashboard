@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AlertService } from '../services/alert.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +14,9 @@ import { AlertService } from '../services/alert.service';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
+  errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private router: Router, private alertService: AlertService) {}
+  constructor(private authService: AuthService, private fb: FormBuilder, private router: Router, private alertService: AlertService) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -25,24 +27,25 @@ export class LoginComponent {
 
   onLogin() {
     if (this.loginForm.invalid) return;
-    this.login();
-    console.log(this.loginForm.value);
-  }
 
-  login() {
     const { email, password } = this.loginForm.value;
-    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
 
-    const validUser = storedUsers.find((user: any) => user.email === email && user.password === password);
-
-    if (validUser) {
-      // Optionally store the current user info
-      localStorage.setItem('currentUser', JSON.stringify(validUser));
-      this.alertService.show('success',`Welcome back, ${validUser.name || 'user'}!`);
-      // Navigate to dashboard here
-    } else {
-      this.alertService.show('error','Invalid credentials');
-    }
+    // Call the authService login method
+    this.authService.login(email, password).subscribe(
+      (success) => {
+        if (success) {
+          // Navigate to dashboard after successful login
+          // this.router.navigate(['/dashboard']);
+        } else {
+          this.errorMessage = 'Invalid email or password';
+          this.alertService.show('error', this.errorMessage); // Show error alert
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Something went wrong!';
+        this.alertService.show('error', this.errorMessage); // Show error alert
+      }
+    );
   }
 
 
