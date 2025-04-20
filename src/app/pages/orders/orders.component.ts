@@ -121,7 +121,17 @@ export class OrdersComponent implements OnInit {
   }
 
   viewBook(book: Book): void {
-    this.router.navigate(['/dashboardpage/library']);
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const ordersKey = `${currentUser.email}-orders`;
+    const storedBooks = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+
+    const selectedBook = storedBooks.find((storedBook: Book) => storedBook.title === book.title);
+
+  if (selectedBook) {
+    this.router.navigate(['/dashboardpage/library'], { queryParams: { bookId: selectedBook.id } });
+  } else {
+    console.log('Book not found in the stored orders');
+  }
   }
 
   // Get the total number of pages
