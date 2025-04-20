@@ -35,7 +35,7 @@ export class LoginComponent {
       (success) => {
         if (success) {
           this.alertService.show('success', 'Login successful!'); // Show success alert
-          // this.router.navigate(['/dashboard']);
+          this.router.navigate(['/dashboardpage']);
         } else {
           this.errorMessage = 'Invalid email or password';
           this.alertService.show('error', this.errorMessage);
