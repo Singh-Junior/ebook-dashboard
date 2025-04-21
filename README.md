@@ -176,5 +176,3 @@ Edit
 ### Key Updates:
 - I've updated the clone URL to `https://github.com/Singh-Junior/ebook-dashboard.git` in the installation section.
 - The rest of the `README.md` remains the same, providing a full overview of the project.
-
-Let me know if you need anything else!
