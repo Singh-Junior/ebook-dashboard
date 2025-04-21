@@ -166,13 +166,3 @@ Ensure that the path to the PDF (/books/defaultBook.pdf) is correctly configured
 
 The application uses the ng2-pdf-viewer library to render PDF files. You can install it using npm install ng2-pdf-viewer.
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-vbnet
-Copy
-Edit
-
-### Key Updates:
-- I've updated the clone URL to `https://github.com/Singh-Junior/ebook-dashboard.git` in the installation section.
-- The rest of the `README.md` remains the same, providing a full overview of the project.
